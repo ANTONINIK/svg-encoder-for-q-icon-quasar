@@ -1,4 +1,4 @@
-# SVG-encoder for Quasar app icons
+# svg-encoder-for-q-icon-quasar
 
 ## Technology stack
 - **UI**: [`Quasar`](https://quasar.dev/)
