@@ -27,7 +27,7 @@ import { appGitHub } from "./icons"; // custom icons for your app
 
 Quasar uses its string format in the case of q-btn and q-icon (:icon and :name), and you can get the correct format for these components using the conversion from SVG in [my solution](https://antoninik.github.io/svg-encoder-for-q-icon-quasar/)
 
-This code is based on the official [parser](https://github.com/quasarframework/quasar/extra/build/utils/index.js/) of the Quasar
+This code is based on the official [parser](https://github.com/quasarframework/quasar/blob/dev/extras/build/utils/index.js/) of the Quasar
 
 ## Technology stack
 

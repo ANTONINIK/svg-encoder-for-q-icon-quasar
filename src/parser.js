@@ -1,4 +1,4 @@
-// This code from official Quasar repo: https://github.com/quasarframework/quasar/extra/build/utils/index.js
+// This code from official Quasar repo: https://github.com/quasarframework/quasar/blob/dev/extras/build/utils/index.js
 
 import xmldom from "xmldom";
 const Parser = new xmldom.DOMParser();
