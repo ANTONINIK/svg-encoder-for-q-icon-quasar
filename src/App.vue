@@ -2,6 +2,7 @@
 import { ref, computed, watchEffect } from "vue";
 import { useQuasar } from "quasar";
 import { appGitHub } from "./icons";
+import { prettifyXml, debounce } from "./helpers";
 import example from "./example";
 import AppDropzone from "./components/AppDropZone.vue";
 import extractSvg from "./parser";
@@ -11,11 +12,9 @@ const xmlSVG = ref("");
 const inlineSVG = ref({});
 const iconName = ref("newIcon");
 
-watchEffect(() => {
+function updateInlineSVG() {
   try {
-    if (xmlSVG.value && iconName.value) {
-      inlineSVG.value = extractSvg(xmlSVG.value, iconName.value);
-    }
+    inlineSVG.value = extractSvg(xmlSVG.value, iconName.value);
   } catch (error) {
     console.log(error);
     inlineSVG.value = {};
@@ -24,6 +23,14 @@ watchEffect(() => {
       color: "negative",
       timeout: 500,
     });
+  }
+}
+
+const debouncedUpdateInlineSVG = debounce(updateInlineSVG, 200);
+
+watchEffect(() => {
+  if (xmlSVG.value && iconName.value) {
+    debouncedUpdateInlineSVG();
   }
 });
 
@@ -62,13 +69,13 @@ function copyToClipboard() {
     ></q-btn>
 
     <div class="app-container">
-      <h1 class="title text-h4 text-white q-ma-none q-pb-md">SVG-encoder for Q-Icon (Quasar)</h1>
+      <h1 class="title text-h4 text-white q-ma-none q-pb-md text-center">SVG-encoder for Q-Icon (Quasar)</h1>
 
       <div class="content bg-white q-pa-md">
         <div class="column">
           <div class="content__header">
             <p class="content__label">Insert SVG:</p>
-            <q-btn dense flat color="primary" @click="xmlSVG = example">Example</q-btn>
+            <q-btn dense flat color="primary" @click="xmlSVG = prettifyXml(example)">Example</q-btn>
           </div>
           <q-input
             class="app-textarea"
@@ -112,7 +119,7 @@ function copyToClipboard() {
           </div>
         </div>
       </div>
-      <AppDropzone @upload="xmlSVG = $event" />
+      <AppDropzone @upload="xmlSVG = prettifyXml($event)" />
     </div>
   </q-scroll-area>
 </template>
@@ -184,9 +191,7 @@ body {
 }
 
 .title {
-  display: flex;
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -225,11 +230,6 @@ body {
     font-weight: 600;
     align-items: center;
   }
-
-  // & > div {
-  //   display: flex;
-  //   flex-direction: column;
-  // }
 
   &__area {
     min-height: 200px;

@@ -63,8 +63,8 @@ function onDragOver(e) {
 function onDragLeave(e) {
   e.preventDefault();
   dragCounter--;
-  if (dragCounter === 0) {
-    isActive.value = false;
+  if (dragCounter <= 0) {
+    close();
   }
 }
 
@@ -73,10 +73,15 @@ function onDragEnter(e) {
   dragCounter++;
   isActive.value = true;
 }
+
+function close() {
+  isActive.value = false;
+  dragCounter = 0;
+}
 </script>
 
 <template>
-  <div class="dropzone" :class="{ 'dropzone--active': isActive }"></div>
+  <div @click="close" class="dropzone" :class="{ 'dropzone--active': isActive }"></div>
 </template>
 
 <style scoped lang="scss">
@@ -93,15 +98,11 @@ function onDragEnter(e) {
   left: 0;
   z-index: 100000;
   display: block;
-  transform: scale(1.4);
-  transition:
-    transform 0.1s,
-    opacity 0.1s;
+  transition: opacity 0.1s;
   opacity: 0;
   pointer-events: none;
 
   &--active {
-    transform: scale(1);
     opacity: 1;
     pointer-events: all;
   }
